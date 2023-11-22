@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지 > 회원정보 확인</title>
+    <title>마이페이지 > 회원정보 수정</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Sunflower:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../../../static/css/reset.css">
-    <link rel="stylesheet" href="../../../../static/css/sub/sub_mypage/sub_myinfo_checkpw/style.css">
+    <link rel="stylesheet" href="../../../../static/css/sub/sub_mypage/sub_myinfo_update/style.css">
 </head>
 
 <body>
@@ -25,7 +25,7 @@
                 <!-- 로고 시작 -->
 
                 <h1 class="logo">
-                    <a href="../../../index.html">
+                    <a href="/">
                         <img src="../../../../static/images/logo.png">
                     </a>
                 </h1>
@@ -41,7 +41,7 @@
                     <ul class="users">
                         <li><a href="#">로그인</a></li>
                         <li><a href="#">회원가입</a></li>
-                        <li><a href="./myinfo_checkpw.html">마이페이지 <i class="fa-solid fa-user"></i></a></li>
+                        <li><a href="/mypage/myinfo/checkpw">마이페이지 <i class="fa-solid fa-user"></i></a></li>
                     </ul>
 
                     <!-- user 박스 끝 -->
@@ -51,11 +51,11 @@
                     <nav>
                         <ul class="nav-main">
                             <li class="main-menu main-menu1">
-                                <a href="../../sub_intro/sub_about/about.html">펜션소개</a>
+                                <a href="/intro/about">펜션소개</a>
                                 <ul class="sub-menu sub-menu1">
-                                    <li><a href="../../sub_intro/sub_about/about.html">펜션소개</a></li>
-                                    <li><a href="../../sub_intro/sub_navigate/navigate.html">찾아오시는 길</a></li>
-                                    <li><a href="../../sub_intro/sub_recommends/recommends.html">주변 볼거리</a></li>
+                                    <li><a href="/intro/about">펜션소개</a></li>
+                                    <li><a href="/intro/navigate">찾아오시는 길</a></li>
+                                    <li><a href="/intro/recom">주변 볼거리</a></li>
                                 </ul>
                             </li>
                             <li class="main-menu main-menu2">
@@ -73,7 +73,7 @@
                                 </ul>
                             </li>
                             <li class="main-menu main-menu4">
-                                <a href="../../sub_facilities/facilities.html">부대시설</a>
+                                <a href="/facil">부대시설</a>
                             </li>
                             <li class="main-menu main-menu5">
                                 <a href="#">커뮤니티</a>
@@ -114,7 +114,7 @@
                     <a href="#">예약 내역</a>
                 </li>
                 <li>
-                    <a href="./myinfo_checkpw.html">내 정보 관리</a>
+                    <a href="/mypage/myinfo/checkpw">내 정보 관리</a>
                 </li>
                 <li>
                     <a href="#">문의하기</a>
@@ -127,26 +127,91 @@
                 </li>
             </ul>
             <div class="myinfo-content">
-                <h3>회원정보 확인</h3>
-                <form action="" class="checkpw">
-                    <p>xxx님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인 합니다.</p>
-                    <table>
-                        <tr>
-                            <th>아이디(이메일)</th>
-                            <td>xxx</td>
-                        </tr>
-                        <tr>
-                            <th>비밀번호</th>
-                            <td>
-                                <input type="password" class="passwd" />
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="btn_box">
-                        <button class="btn_check">확인</button>
-                        <button class="btn_cancel" ondblclick="location.href='./myinfo_checkpw.html'">취소</button>
-                    </div>
-                </form>
+                <h3>회원정보 수정</h3>
+                <table>
+                    <tr>
+                        <th>아이디(이메일)</th>
+                        <td>
+                            <p class="change_el">
+                                xxx<button class="userid_change_btn">아이디(이메일) 변경</button>
+                            </p>
+                            <form class="userid_change">
+                                <p>
+                                    <input type="text" class="userid" value="xxx"/>
+                                    <button class="btn_change">변경하기</button>
+                                </p>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td>
+                            <p class="change_el">
+                                홍길동<button class="username_change_btn">이름변경</button>
+                            </p>
+                            <form class="username_change">
+                                <p>
+                                    <input type="text" class="username" value="홍길동"/>
+                                    <button class="btn_change">변경하기</button>
+                                </p>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>휴대폰 번호</th>
+                        <td>
+                            <p class="change_el">
+                                010-1234-5678<button class="usertell_change_btn">휴대폰 번호 변경</button>
+                            </p>
+                            <form class="usertell_change">
+                                <p>
+                                    <input type="text" class="usertell" value="010-1234-5678"/>
+                                    <button class="btn_change">변경하기</button>
+                                </p>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호 변경</th>
+                        <td>                           
+                            <form class="userpasswd_change">
+                                <table class="change_passwd_box">
+                                    <tr>
+                                        <td class="change_passwd_title">현재 비밀번호</td>
+                                        <td>
+                                            <input type="password" class="userpasswd"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="change_passwd_title">새 비밀번호</td>
+                                        <td>
+                                            <input type="password" class="new_userpasswd"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="change_passwd_title">비밀번호 다시 입력</td>
+                                        <td>
+                                            <input type="password" class="renew_userpasswd"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="change_passwd_title"></td>
+                                        <td>
+                                            <button class="passwd_change_btn">비밀번호 변경</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+                <p class="secession_txt">
+                    탈퇴를 원하시면 우측의 회원탈퇴 버튼을 눌러주세요.
+                    <button class="secession_btn" onclick="location.href='/mypage/myinfo/sece'">회원탈퇴</button>
+                </p>
+                <div class="btn_box">
+                    <button class="btn_exit" onclick="location.href='/mypage/myinfo/checkpw'">나가기</button>
+                </div>
             </div>
         </section>
 
@@ -157,7 +222,7 @@
         <footer>
             <div class="footer-wrap">
                 <ul>
-                    <li class="logo footer-logo"><a href="../../../index.html"><img src="../../../../static/images/logo.png"></a></li>
+                    <li class="logo footer-logo"><a href="/"><img src="../../../../static/images/logo.png"></a></li>
                     <li class="copyright">
                         <p>사업주 : 홍길동</p>
                         <p>주소 : 경상남도 창녕군 남지읍 신전길 300</p>
@@ -194,6 +259,7 @@
     </div>
 
     <script src="../../../../static/js/header_nav.js"></script>
+    <script src="../../../../static/js/sub/sub_mypage/sub_myinfo_update/myinfo_update.js"></script>
 </body>
 
 </html>
