@@ -2,12 +2,12 @@
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>header</title>
-</head>
-<body>
-  <div th:fragment="header_f" class="header-wrap">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>header</title>
+    </head>
+    <body>
+    <div th:fragment="header_f" class="header-wrap">
 
     <!-- 로고 시작 -->
 
@@ -26,9 +26,15 @@
         <!-- user 박스 -->
 
         <ul class="users">
-            <li><a href="#">로그인</a></li>
-            <li><a href="#">회원가입</a></li>
-            <li><a href="/mypage/myinfo/checkpw">마이페이지 <i class="fa-solid fa-user"></i></a></li>
+            <th:block th:if="${#strings.isEmpty(session.user)}">
+                <li><a href="/login">로그인</a></li>
+                <li><a href="/register">회원가입</a></li>
+            </th:block>
+
+            <th:block th:unless="${#strings.isEmpty(session.user)}">
+                <li><a href="/mypage/myinfo/checkpw">마이페이지 <i class="fa-solid fa-user"></i></a></li>
+                <li><a href="/logout">로그아웃</a></li>
+            </th:block>
         </ul>
 
         <!-- user 박스 끝 -->
@@ -53,9 +59,9 @@
                     </ul>
                 </li>
                 <li class="main-menu main-menu3">
-                    <a href="#">예약</a>
+                    <a href="/reserve/checkroom">예약</a>
                     <ul class="sub-menu sub-menu3">
-                        <li><a href="#">예약하기</a></li>
+                        <li><a href="/reserve/checkroom">예약하기</a></li>
                         <li><a href="#">예약 확인</a></li>
                     </ul>
                 </li>
@@ -63,10 +69,10 @@
                     <a href="/facil">부대시설</a>
                 </li>
                 <li class="main-menu main-menu5">
-                    <a href="#">커뮤니티</a>
+                    <a href="/board/notice">커뮤니티</a>
                     <ul class="sub-menu sub-menu5">
-                        <li><a href="#">공지사항</a></li>
-                        <li><a href="#">게시판</a></li>
+                        <li><a href="/board/notice">공지사항</a></li>
+                        <li><a href="/board/qna">QnA</a></li>
                         <li><a href="#">리뷰</a></li>
                     </ul>
                 </li>
