@@ -12,118 +12,7 @@
     <link rel="stylesheet" href="../../../../static/css/reset.css">
     <link rel="stylesheet" href="../../../../static/css/sub/sub_board/sub_notice/style.css">
     <style>
-        /* 게시판 시작 */
 
-.notice-content {
-    width: 85%;
-    margin: 0 auto;
-    margin-left: 80px;
-}
-
-.search_box {
-    display: flex;
-    justify-content: end;
-    margin-bottom: 20px;
-}
-
-.search_box input {
-    outline: 0;
-    border: 1px solid #ccc;
-    height: 30px;
-}
-
-#searchType {
-    outline: 0;
-    border: 1px solid #ccc;
-    border-right: 0;
-}
-
-.search_words_box {
-    position: relative;
-}
-
-.words {
-    padding: 0 10px;
-
-}
-
-.searchBtn {
-    position: absolute;
-    background-color: #fff;
-    right: 5px;
-    top: 28%;
-    border: 0;
-    cursor: pointer;
-}
-
-.searchBtn i {
-    /* background-color: ; */
-    font-size: 16px;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-tr {
-    height: 40px;
-}
-
-tr:first-child {
-    border-top: 2px solid #555;
-    background-color: #eee;
-}
-
-td,
-th {
-    border-bottom: 1px solid #ccc;
-
-}
-
-th:nth-child(1) {
-    width: 13%;
-}
-
-th:nth-child(3) {
-    width: 15%;
-}
-
-th:nth-child(4) {
-    width: 15%;
-}
-
-th:nth-child(5) {
-    width: 10%;
-}
-
-td {
-    text-align: center;
-}
-
-td:nth-child(2) {
-    text-align: left;
-    padding: 0 10px;
-    font-weight: bold;
-}
-
-.content_bottom {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-}
-
-.write_notice_btn {
-    padding: 4px 8px;
-    border: 0;
-    background-color: rgba(225, 232, 234, 0.82);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-weight: bold;
-    border-radius: 4px;
-}
-
-/* 게시판 끝 */
     </style>
 </head>
 <body>
@@ -158,16 +47,16 @@ td:nth-child(2) {
         </ul>
         <div class="notice-content">
             <div class="select_box">
-                <form action="">
+                <form action="/board/notice" method="get">
                     <div class="search_box">
                         <select name="searchType" id="searchType">
-                            <option value="제목">제목</option>
-                            <option value="제목 + 내용">제목 + 내용</option>
-                            <option value="작성자">작성자</option>
+                            <option value="board_notice_subject">제목</option>
+                            <option value="board_notice_content">내용</option>
+                            <option value="board_notice_writer">작성자</option>
                         </select>
                         <div class="search_words_box">
-                            <input type="text" class="words" />
-                            <button class="searchBtn">
+                            <input type="text" class="words" name="words" />
+                            <button type="submit" class="searchBtn">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
                         </div>
@@ -182,94 +71,53 @@ td:nth-child(2) {
                     <th>등록일</th>
                     <th>조회수</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>개비리길 펜션에 오신것을 환영합니다.</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
+                <tr th:each="list, index: ${list}">
+                    <td>[[${cnt - ((page.page - 1) * page.pageCount) - index.index}]]</td>
+                    <td>
+                        <a th:href="@{/board/notice/view?(id=${list.boardNoticeId})}">
+                            [[${list.boardNoticeSubject}]]
+                        </a>
+                    </td>
+                    <td>[[${list.boardNoticeWriter}]]</td>
+                    <td>[[${list.boardNoticeRegdate}]]</td>
+                    <td>[[${list.boardNoticeVisit}]]</td>
                 </tr>
             </table>
             <div class="content_bottom">
-                <div class="bottom-left"></div>
+                <div class="bottom-left">
+                    <a href="/board/qna" class="btn gray" style="color: #555; font-weight: bold">전체목록</a>
+                </div>
                 <div class="page_number">
-                    <a href="#">
+                    <a href="#" th:if="${page.page <= 1}"></a>
+                    <a th:href="@{/board/notice?(page=${page.page - 1})}" th:unless="${page.page <= 1}">
                         &nbsp;<i class="fa-solid fa-angle-left"></i>&nbsp;
                     </a>
-                    <a href="#">
-                        1
+                    <a th:href="@{/board/notice?(page=${i})}" th:each="i : ${ #numbers.sequence(page.startPage, page.endPage, 1) }">
+                        <th:block th:if="${page.page eq i}">
+                            <span style="color:#f00;">
+                                <strong>[[${i}]]</strong>
+                            </span>
+                        </th:block>
+                        <th:block th:unless="${page.page eq i}">
+                            <span>
+                                [[${i}]]
+                            </span>
+                        </th:block>
                     </a>
-                    <a href="#">
+                    <a href="#" th:if="${page.page >= page.totalPage}"></a>
+                    <a th:href="@{/board/notice?(page=${page.page + 1})}" th:unless="${page.page >= page.totalPage}">
                         &nbsp;<i class="fa-solid fa-angle-right"></i>&nbsp;
                     </a>
                 </div>
                 <div>
-                    <button class="write_notice_btn">
-                        글쓰기
-                    </button>
+                    <th:block th:if="${#strings.isEmpty(session.admin)}">
+
+                    </th:block>
+                    <th:block th:unless="${#strings.isEmpty(session.admin)}">
+                        <a th:href="@{/board/notice/write?(${session.name})}" class="btn blue">
+                            글쓰기
+                        </a>
+                    </th:block>
                 </div>
             </div>
         </div>
@@ -285,6 +133,6 @@ td:nth-child(2) {
         <i class="fa-solid fa-arrow-up"></i>
     </a>
 
-    <script src="../../../../static/js/header_nav.js"></script>
+    <script src="/static/js/header_nav.js"></script>
 </body>
 </html>

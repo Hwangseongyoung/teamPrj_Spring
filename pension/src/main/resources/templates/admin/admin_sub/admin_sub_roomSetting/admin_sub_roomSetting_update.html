@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../static/css/admin/reset.css">
+    <link rel="stylesheet" href="../../../../static/css/admin/admin_sub/admin_sub_roomSetting/sub_style.css">
+</head>
+
+<body>
+
+    <div id="wrap">
+
+        <div th:insert="~{admin/fragment/side.html::side_f}"></div>
+        <div class="main-wrap">
+            <div th:insert="~{admin/fragment/header.html::header_f}"></div>
+            <main>
+                <h4>환경설정 > 객실 정보 수정</h4>
+                <section class="room-write-wrap">
+                    <h3>객실 수정하기</h3>
+                    <div class="room-write">
+                        <form method="post" action="/admin/roomSettingUpdate" enctype="multipart/form-data" onsubmit="return changeRoom()">
+                            <div class="view-img-wrap">
+                                <p>사진을 클릭하여 객실 메인 이미지를 변경하세요.(jpg로 업로드 하십시오.)</p>
+                                <img th:src="@{|/${roomList.roomName}/${roomList.roomName}_thumbnail.jpg|}" onerror="this.src='../../../../static/images/none1_img.jpg'" alt="" onclick="clickThumbnail()">
+                                <input type="file" name="main" class="thumbnail-btn" onchange="extCheck()" accept="image/*">
+                            </div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>객실 이름</th>
+                                        <td>
+                                            <input type="text" name="roomName" onblur="roomNameCheck()" th:value="${roomList.roomName}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>가격</th>
+                                        <td>
+                                            <input type="text" name="roomPrice" th:value="${roomList.roomPrice}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>인원수</th>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <label>최대 인원</label>
+                                                    <input type="text" name="maxPerson" th:value="${roomList.maxPerson}">
+                                                </li>
+                                                <li>
+                                                    <label>최소 인원</label>
+                                                    <input type="text" name="minPerson" th:value="${roomList.minPerson}">
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>입실 / 퇴실 시간</th>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <label>입실 시간</label>
+                                                    <input type="text" name="checkinTime" th:value="${roomList.checkinTime}">
+                                                </li>
+                                                <li>
+                                                    <label>퇴실 시간</label>
+                                                    <input type="text" name="checkoutTime" th:value="${roomList.checkoutTime}">
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button type="submit" class="btn">수정하기</button>
+                                        </td>
+                                    </tr>
+                                    <input type="hidden" name="roomNum" th:value="${roomList.roomNum}">
+                                </tbody>
+                            </table>
+                        </form>
+                        <form method="post" action="/admin/imgUpload" enctype="multipart/form-data" class="insert_img">
+                            <p>객실 이미지 등록하기</p>
+                                <th:block th:if="${#lists.isEmpty(roomImgList)}">
+                                    <h3 class="empty-alert">객실 이미지를 등록하세요.</h3>
+                                </th:block>
+                            <ul class="view_imgs">
+                                <th:block th:unless="${#lists.isEmpty(roomImgList)}">
+                                    <li th:each="imgList: ${roomImgList}">
+                                        <img th:onclick="frmCheck([[${imgList.savedFileName}]], [[${imgList.orgName}]])" th:src="@{|/${imgList.folderName}/${imgList.savedFileName}|}" alt="">
+                                    </li>
+                                </th:block>
+                            </ul>
+                            <div class="insert_img_wrap">
+                                <input type="hidden" name="roomName" th:value="${roomList.roomName}">
+                                <input type="hidden" name="roomNum" th:value="${roomList.roomNum}">
+                                <input type="file" name="roomImages" multiple onchange="imagesCheck()" accept="image/*">
+                                <button class="btn">객실 이미지 등록하기</button>
+                            </div>
+                        </form>
+                        <form action="/admin/deleteRoomInfoImg" method="post">
+                            <div class="insert_img_wrap">
+                                <input type="hidden" name="savedFileName" />
+                                <input type="hidden" name="roomNum" th:value="${roomList.roomNum}" />
+                                <input type="text" name="orgName" readonly />
+                                <button class="btn red">객실 이미지 삭제하기</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+<script>
+    let roomName = document.querySelector("input[name=roomName]");
+    let roomNum = document.querySelector("input[name=roomNum]");
+    let roomPrice = document.querySelector("input[name=roomPrice]");
+    let maxPerson = document.querySelector("input[name=maxPerson]");
+    let minPerson = document.querySelector("input[name=minPerson]");
+    let checkinTime = document.querySelector("input[name=checkinTime]");
+    let checkoutTime = document.querySelector("input[name=checkoutTime]");
+    let fileName_input = document.querySelector("input[name=savedFileName]");
+
+    let thumbnail_btn = document.querySelector(".thumbnail-btn");
+    let orgName_input = document.querySelector("input[name=orgName]");
+    let ext = "";
+    let roomImages = document.querySelector("input[name=roomImages]");
+    let maxSize = 1 * 1024 * 1024;
+
+    function imagesCheck() {
+        for(let i=0;roomImages.files.length;i++) {
+            let fileSize = roomImages.files[i].size;
+            if(fileSize > maxSize) {
+                alert("첨부파일의 용량이 너무 큽니다.\n1MB미만의 파일을 업로드 하세요.");
+                $(roomImages).val('');
+                break;
+            }
+        }
+    }
+
+    function clickThumbnail() {
+        $(".thumbnail-btn").click();
+    }
+
+    function extCheck() {
+        ext = thumbnail_btn.value.split(".").pop().toLowerCase();
+        
+        if(ext != "jpg") {
+            alert("jpg 이미지만 업로드 가능 합니다.\n확장자 명을 확인 후 다시 업로드 하세요.");
+            thumbnail_btn.value = "";
+            return false;
+        }
+        let fileSize = thumbnail_btn.files[0].size;
+
+        if(fileSize > maxSize) {
+            alert("첨부파일의 용량이 너무 큽니다.\n1MB미만의 파일을 업로드 하세요.");
+            thumbnail_btn.value = "";
+        }
+    }
+
+    function frmCheck(fileName, orgName){
+        fileName_input.value = fileName;
+        orgName_input.value = orgName;
+    }
+
+    function changeRoom() {
+
+        if (roomName.value == "") {
+            alert("객실 이름을 입력하세요");
+            roomName.focus();
+            return false;
+        }
+        if (roomPrice.value == "") {
+            alert("객실 가격을 입력하세요");
+            roomPrice.focus();
+            return false;
+        }
+        if (maxPerson.value == "") {
+            alert("객실 최대 인원 수를 입력하세요");
+            maxPerson.focus();
+            return false;
+        }
+        
+        if(maxPerson.value > 12) {
+            alert("설정 가능한 객실 최대 인원 수는 12명 입니다.\n확인 후 다시 입력해 주세요.");
+            maxPerson.value = "";
+            maxPerson.focus();
+            return false;
+        }
+        
+        if (minPerson.value == "") {
+            alert("객실 최소 인원 수를 입력하세요.");
+            minPerson.focus();
+            return false;
+        }
+        
+        if (minPerson.value < 4) {
+            alert("설정 가능한 객실 최소 인원 수는 4명 입니다.\n확인 후 다시 입력해 주세요.");
+            minPerson.value = "";
+            minPerson.focus();
+            return false;
+        }
+        
+        if (checkinTime.value == "") {
+            alert("체크인 시간을 입력하세요.");
+            checkinTime.focus();
+            return false;
+        }
+        if (checkoutTime.value == "") {
+            alert("체크아웃 시간을 입력하세요.");
+            checkoutTime.focus();
+            return false;
+        }
+    }
+
+    function roomNameCheck() {
+        $.ajax({
+            type: "get",
+            url: "/admin/roomUpdateCheck",
+            dataType: "json",
+            data: {
+                roomName: roomName.value,
+                roomNum: roomNum.value
+            },
+            success: function (res) {
+                if (res.msg == "failure") {
+                    alert("이미 등록된 객실 이름입니다.\n다른 이름으로 재입력해 주세요.");
+                    roomName.value = "";
+                    roomName.focus();
+                    return false;
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>
